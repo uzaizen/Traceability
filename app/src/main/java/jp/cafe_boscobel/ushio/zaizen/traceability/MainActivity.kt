@@ -17,6 +17,9 @@ import java.util.*
 private var snapshotListener : ListenerRegistration? = null
 
 class MainActivity : AppCompatActivity() {
+    
+    private lateinit var mTaskAdapter:TaskAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             .document(task.id)
                 .set(task)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("uztest", "DocumentSnapshot added with ID: ${task.id.toString()}")
+                    Log.d("uztest", "DocumentSnapshot added with ID: ${documentReference.toString()}")
                 }
                 .addOnFailureListener { e ->
                     Log.d("uztest", "Error adding document", e)
@@ -101,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         db.collection("task").document( key)
             .set(task)
             .addOnSuccessListener { documentReference ->
-                Log.d("uztest", "DocumentSnapshot updated with ID: ${task.id},task.id")
+                Log.d("uztest", "DocumentSnapshot updated with ID: ${documentReference}")
             }
             .addOnFailureListener { e ->
                 Log.d("uztest", "Error updating document", e)
