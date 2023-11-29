@@ -12,12 +12,13 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SnapshotMetadata
 import com.google.firebase.ktx.Firebase
 import com.squareup.okhttp.internal.DiskLruCache
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 private var snapshotListener : ListenerRegistration? = null
 
 class MainActivity : AppCompatActivity() {
-    
+
     private lateinit var mTaskAdapter:TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +49,13 @@ class MainActivity : AppCompatActivity() {
                     Log.d("uztest", "Snapshot Listener worked")}
 
  */
+
+        mTaskAdapter = TaskAdapter(this)
+
+        listView1.setOnItemClickListener {parent, _,position,_ ->
+            val task = parent.adapter.getItem(position) as Task
+            Log.d("uzaizen", "tapped "+task.id.toString())
+        }
 
         /* 指定したidでデータベースに書き込み */
         db.collection("task")
@@ -116,6 +124,12 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+        reloadListView()
+
+    }
+
+    private fun reloadListView(){
+       //Firestoreからすべてのデータを取得しmTaskAdapter.mTaskListに渡し、それをlistView1.adapterに渡す必要がある
 
     }
 
