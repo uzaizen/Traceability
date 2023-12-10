@@ -2,6 +2,7 @@ package jp.cafe_boscobel.ushio.zaizen.traceability
 
 // https://qiita.com/Kaito-Dogi/items/b2da06db10a95fef84b3
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,30 +27,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        fab.setOnClickListener { view ->
+            reloadListView()
+        }
+
+
         // Firestoreをインスタンス化
         db = FirebaseFirestore.getInstance()
-
-
-        var task = Task()
-//        task.uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        task.id  = "111"
-        task.name = "name"
-        task.date = Date()
-        task.amount = 0
-        task.comment = ""
-        task.dimension = "g"
-        task.shopname = "marunaka"
-
-        Log.d("uztest", "DB Write")
-
-/*  下記モジュールは何故か　"id"="003"以外のケースでも起動されているようである。
-        db.collection("task").whereEqualTo("id", "003")
-                .addSnapshotListener{querySnapshot, firebaseFirestoreException ->
-                    if(firebaseFirestoreException != null){return@addSnapshotListener
-                }
-                    Log.d("uztest", "Snapshot Listener worked")}
-
- */
 
         mTaskAdapter = TaskAdapter(this)
 
@@ -58,8 +42,21 @@ class MainActivity : AppCompatActivity() {
             Log.d("uzaizen", "tapped "+task.id.toString())
         }
 
-/*
+        reloadListView()
+
+    /*
         /* 指定したidでデータベースに書き込み */
+         Log.d("uztest", "DB Write")
+
+        var task = Task()
+        task.id  = "111"
+        task.name = "name"
+        task.date = Date()
+        task.amount = 0
+        task.comment = ""
+        task.dimension = "g"
+        task.shopname = "marunaka"
+
         db.collection("task")
             .document(task.id)
                 .set(task)
@@ -128,43 +125,33 @@ class MainActivity : AppCompatActivity() {
 
 
  */
-        reloadListView()
 
     }
 
     private fun reloadListView(){
-    var task1=Task()
-        //Firestoreからすべてのデータを取得しmTaskAdapter.mTaskListに渡し、それをlistView1.adapterに渡す必要がある
-//        val taskResult = db.collection("task").get()
-//        listView1.adapter=mTaskAdapter
-
-        //mTaskListにtaskResultの内容をコピーするにはどうするか
-//        mTaskAdapter.mTaskList = taskResult
+        //Firestoreからすべてのデータを取得しmTaskAdapter.mTaskListに渡し、それをlistView1.adapterに渡す
         db.collection("task")
                 .get()
                 .addOnSuccessListener { result ->
+                    var i:Int = 0
                     for (document in result){
-                        Log.d("uztest", "${document.id} => ${document.data}")
-                        task1.id=document.data["id"].toString()
-                        Log.d("uztest","id set")
-                        task1.name=document.data["name"].toString()
-                        Log.d("uztest","name set")
-                        task1.date=document.data["date"] as? Date
-                        Log.d("uztest","date set")
-                        task1.amount=document.data["amount"] as? Int
-                        Log.d("uztest","amount set")
-                        task1.comment=document.data["comment"].toString()
-                        task1.dimension=document.data["dimension"].toString()
-                        task1.shopname=document.data["shopname"].toString()
+                        var task=Task()
 
-                        Log.d("uztest","data set ${document.id}")
-                        mTaskAdapter.mTaskList.add(task1)
+                        task.id=document.data["id"].toString()
+                        task.name=document.data["name"].toString()
+                        task.date=document.data["date"] as? Date
+                        task.amount=document.data["amount"] as? Int
+                        task.comment=document.data["comment"].toString()
+                        task.dimension=document.data["dimension"].toString()
+                        task.shopname=document.data["shopname"].toString()
+
+                        mTaskAdapter.mTaskList.add(i, task)
+                        i+=1
                     }
                 }
+
         listView1.adapter=mTaskAdapter
         mTaskAdapter.notifyDataSetChanged()
-        Log.d("uztest","reload is done")
-
     }
 
 }
