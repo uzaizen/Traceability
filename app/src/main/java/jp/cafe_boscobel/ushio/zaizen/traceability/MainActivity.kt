@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         fab.setOnClickListener { view ->
             reloadListView()
         }
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("uzaizen", "tapped "+task.id.toString())
         }
 
-        reloadListView()
+//        reloadListView()
 
     /*
         /* 指定したidでデータベースに書き込み */
@@ -133,7 +134,6 @@ class MainActivity : AppCompatActivity() {
         db.collection("task")
                 .get()
                 .addOnSuccessListener { result ->
-                    var i:Int = 0
                     for (document in result){
                         var task=Task()
 
@@ -145,13 +145,15 @@ class MainActivity : AppCompatActivity() {
                         task.dimension=document.data["dimension"].toString()
                         task.shopname=document.data["shopname"].toString()
 
-                        mTaskAdapter.mTaskList.add(i, task)
-                        i+=1
+                        mTaskAdapter.mTaskList.add(task)
                     }
+                    listView1.adapter=mTaskAdapter
+                    mTaskAdapter.notifyDataSetChanged()
                 }
 
-        listView1.adapter=mTaskAdapter
-        mTaskAdapter.notifyDataSetChanged()
+        mTaskAdapter.mTaskList.clear()
+
     }
 
 }
+
