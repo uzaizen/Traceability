@@ -1,0 +1,7 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Change the parent theme to one without action bar support -->
+        <!-- For example: parent="Theme.AppCompat.Light.NoActionBar" -->
+        <!-- ... other style attributes ... -->
+    </style>
+</resources>

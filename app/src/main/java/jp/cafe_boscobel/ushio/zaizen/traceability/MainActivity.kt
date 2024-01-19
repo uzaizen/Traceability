@@ -3,11 +3,22 @@ package jp.cafe_boscobel.ushio.zaizen.traceability
 // https://qiita.com/Kaito-Dogi/items/b2da06db10a95fef84b3
 
 import android.content.Intent
+import android.net.wifi.WifiConfiguration.AuthAlgorithm.strings
+import android.net.wifi.WifiConfiguration.KeyMgmt.strings
+import android.net.wifi.WifiConfiguration.Protocol.strings
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import com.google.android.gms.common.config.GservicesValue.value
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +27,8 @@ import com.google.firebase.firestore.SnapshotMetadata
 import com.google.firebase.ktx.Firebase
 import com.squareup.okhttp.internal.DiskLruCache
 import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.activity_main.fab
+//import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlin.coroutines.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -25,35 +38,79 @@ import kotlin.concurrent.thread
 private var snapshotListener : ListenerRegistration? = null
 lateinit var db:FirebaseFirestore
 lateinit var mIngredientAdapter:IngredientAdapter
-class MainActivity : AppCompatActivity() {
+//lateinit var mTaskAdapter:TaskAdapter
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
 //    private lateinit var mTaskAdapter: TaskAdapter
 //    private lateinit var mIngredientAdapter: IngredientAdapter
 //    private lateinit var db: FirebaseFirestore
 
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+
     override fun onCreate(savedInstanceState: Bundle?) {
+ try{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
+     if (supportActionBar == null) {
+         setSupportActionBar(findViewById(R.id.toolbar))  // ここで適切なToolbarのIDを指定する必要があります
+     }
+
+
+ //           fab.setOnClickListener { View -> Log.d("uztest", "114") }
+
+     actionBarDrawerToggle = ActionBarDrawerToggle(
+         this,
+         drawer_layout,
+         toolbar,
+         R.string.navigation_drawer_open,
+         R.string.navigation_drawer_close
+     )
+     drawer_layout.addDrawerListener(actionBarDrawerToggle)
+     actionBarDrawerToggle.syncState()
+
+     nav_view.setNavigationItemSelectedListener {
+         when (it.itemId) {
+             R.id.nav_item1 -> showToast(getString(R.string.ingredient))
+             R.id.nav_item2 -> showToast(getString(R.string.midproduct))
+             R.id.nav_item3 -> showToast(getString(R.string.finalproduct))
+             // Add more cases as needed
+         }
+         drawer_layout.closeDrawers()
+         true
+     }
+/*
         fab.setOnClickListener { view ->
             reloadListView1()
         }
 
+ */
 
 
-
-        // Firestoreをインスタンス化
-        db = FirebaseFirestore.getInstance()
+            // Firestoreをインスタンス化
+            db = FirebaseFirestore.getInstance()
 
 //        mTaskAdapter = TaskAdapter(this)
-        mIngredientAdapter = IngredientAdapter(this)
+            mIngredientAdapter = IngredientAdapter(this)
 
+
+/*        listView1.setOnItemClickListener { parent, _, position, _ ->
+            Log.d("uztest", "position=${position.toString()}")
+            val task = parent.adapter.getItem(position) as Task
+            Log.d("uztest", "tapped " + task.name.toString())
+        }
+
+ */
+/*
         listView1.setOnItemClickListener { parent, _, position, _ ->
             Log.d("uztest", "position=${position.toString()}")
             val ingredient = parent.adapter.getItem(position) as Ingredient
             Log.d("uztest", "tapped " + ingredient.name.toString())
         }
+
+ */
 
 
 /*
@@ -76,15 +133,14 @@ class MainActivity : AppCompatActivity() {
  */
 
 
-//        loaddata1()
-        val ingredient=Ingredient("000",Date(),"name0",0,"g","dummy","", mutableListOf(""))
-        ingredient.readdata()
-        Thread.sleep(5000)
-        reloadListView1()
+            val ingredient =
+                Ingredient("000", Date(), "name0", 0, "g", "dummy", "", mutableListOf(""))
+            ingredient.readdata()
+            Thread.sleep(5000)
+            //    reloadListView1()
 
-        /*
-        /* 指定したidでデータベースに書き込み */
-         Log.d("uztest", "DB Write")
+
+/*
 
         var task = Task()
         task.id  = "111"
@@ -106,6 +162,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
         Log.d("uztest", "Done DB write")
+
+ */
+
+            /*
 
         /* 指定したデータの読み出し */
         var key:String = "905"
@@ -164,9 +224,8 @@ class MainActivity : AppCompatActivity() {
 
  */
 
-    }
 
-    /*
+            /*
     private fun loaddata0(){
         db.collection("task")
                 .get()
@@ -191,46 +250,9 @@ class MainActivity : AppCompatActivity() {
 
      */
 
-    private fun loaddata1() {
-        db.collection("ingredient")
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        val ingredient = Ingredient("id_dummy",
-                                                    Date(),
-                                                    "name_dummy",
-                                                    0,
-                                                    "g_dummy",
-                                                    "shopname_dummy",
-                                                    "comment_dummy",
-                                                    mutableListOf())
 
-                        ingredient.id = document.data["id"].toString()
-                        val firestoreTimestamp = document.data["date"] as com.google.firebase.Timestamp
-                        ingredient.date = firestoreTimestamp.toDate()
-                        ingredient.name = document.data["name"].toString()
-                        ingredient.amount = document.data["amount"].toString().toInt()
-                        ingredient.dimension = document.data["dimension"].toString()
-                        ingredient.shopname = document.data["shopname"].toString()
-                        ingredient.comment = document.data["comment"].toString()
-                        if (document.data["idrel"]!=null){
-                            ingredient.idrel = document.data["idrel"] as MutableList<String>
-                            if(ingredient.idrel.size != 0){
-                            Log.d("uztest", "idrel="+ingredient.idrel)
-                            var idrel1 = ingredient.idrel[0]
-                            Log.d("uztest", "idrel = ${idrel1}")}
-                        }
-
-                        mIngredientAdapter.mIngredientList.add(ingredient)
-                    }
-                }
-                .addOnFailureListener { Log.d("uztest","read failed")
-
-                }
-    }
-
-
-/*    private fun reloadListView0() {
+/*
+    private fun reloadListView0() {
             listView1.adapter = mTaskAdapter
             mTaskAdapter.notifyDataSetChanged()
 //                    mTaskAdapter.mTaskList.clear()
@@ -238,10 +260,53 @@ class MainActivity : AppCompatActivity() {
 
  */
 
+
+/*
     private fun reloadListView1() {
         listView1.adapter = mIngredientAdapter
         mIngredientAdapter.notifyDataSetChanged()
 //        mIngredientAdapter.mIngredientList.clear()
+    }
+
+ */
+        }
+        catch (e: Exception) {
+            Log.d("uztest", "Error in onCreate", e)
+            e.printStackTrace()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.nav_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        // Handle other action bar items...
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.nav_item1) {
+            toolbar.title = getString(R.string.menu_ingredient_label)
+        } else if (id == R.id.nav_item2) {
+            toolbar.title = getString(R.string.menu_midproduct_label)
+        } else if (id == R.id.nav_item3) {
+            toolbar.title = getString(R.string.menu_finalproduct_label)
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 

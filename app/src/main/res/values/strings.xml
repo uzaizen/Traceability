@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">Traceability</string>
+    <string name="app_name">トレーサビリティ</string>
+
+    <string name="genre_select_label">ジャンル</string>
+    <string name="settings_titile">設定</string>
+
+    <string name="navigation_drawer_open">navigation_open</string>
+    <string name="navigation_drawer_close">navigation_close</string>
+
+    <string name="ingredient">材料</string>
+    <string name="midproduct">中間製品</string>
+    <string name="finalproduct">完成品</string>
+
+    <string name="file_select_label">ファイル選択</string>
+    <string name="menu_ingredient_label">材料ファイル</string>
+    <string name="menu_midproduct_label">中間製品ファイル</string>
+    <string name="menu_finalproduct_label">完成品ファイル</string>
 </resources>
