@@ -7,8 +7,8 @@ public class Task {
 
 //    var id = UUID.randomUUID().toString()
     var id :String = ""
-    var date : Date = Date()
-    var amount : Int = 0
+    var date : Date? = Date()
+    var amount : Int? = 0
     var dimension: String = ""
     var shopname : String = ""
     var comment: String = ""

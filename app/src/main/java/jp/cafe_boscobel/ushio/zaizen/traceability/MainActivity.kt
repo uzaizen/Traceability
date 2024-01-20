@@ -52,7 +52,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
  try{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+ }
+ catch (e: Exception) {
+     Log.d("uztest", "Error in onCreate", e)
+     e.printStackTrace()
+ }
 
+        showFragmentMidproduct()
 
      if (supportActionBar == null) {
          setSupportActionBar(findViewById(R.id.toolbar))  // ここで適切なToolbarのIDを指定する必要があります
@@ -269,15 +275,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
  */
-        }
-        catch (e: Exception) {
-            Log.d("uztest", "Error in onCreate", e)
-            e.printStackTrace()
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.nav_menu, menu)
+        menuInflater.inflate(R.menu.menu_option, menu)
         return true
     }
 
@@ -295,8 +297,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.nav_item1) {
             toolbar.title = getString(R.string.menu_ingredient_label)
+            showFragmentIngredience()
         } else if (id == R.id.nav_item2) {
             toolbar.title = getString(R.string.menu_midproduct_label)
+            showFragmentMidproduct()
         } else if (id == R.id.nav_item3) {
             toolbar.title = getString(R.string.menu_finalproduct_label)
         }
@@ -307,8 +311,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        if (message == getString(R.string.ingredient)) showFragmentIngredience()
+        if (message == getString(R.string.midproduct)) showFragmentMidproduct()
     }
 
+
+    private fun showFragmentIngredience() {
+        val fragmentA = Fragment_Ingredience()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragmentA)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
+    private fun showFragmentMidproduct() {
+        val fragmentB = Fragment_Midproduct()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragmentB)
+            .addToBackStack(null)
+            .commit()
+    }
 
 }
 

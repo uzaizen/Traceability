@@ -1,19 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version ="1.0" encoding ="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_item1"
-            android:title="材料ファイル" />
+            android:title="オプションアイテム１" />
 
         <item
             android:id="@+id/nav_item2"
-            android:title="中間製品ファイル" />
-
-        <item
-            android:id="@+id/nav_item3"
-            android:title="完成品ファイル" />
+            android:title="オプションアイテム２" />
 
 
         <!-- Add more items as needed -->
