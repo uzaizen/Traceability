@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class IngredientAdapter(context: Context): BaseAdapter() {
     private val mLayoutInflater: LayoutInflater
-    var mIngredientList = mutableListOf<Ingredient>()
+    var mIngredientList = mutableListOf<Material>()
 
     init {
         this.mLayoutInflater = LayoutInflater.from(context)

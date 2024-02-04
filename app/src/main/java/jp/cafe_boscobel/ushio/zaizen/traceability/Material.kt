@@ -34,6 +34,6 @@ abstract class Material
         this.idrel = idrel
     }
 
-    abstract fun readdata()
-    abstract fun savedata()
+    abstract suspend fun readdata()
+    abstract suspend fun savedata()
 }

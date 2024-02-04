@@ -1,7 +1,10 @@
 package jp.cafe_boscobel.ushio.zaizen.traceability
 
 import android.util.Log
+import com.google.android.gms.tasks.Tasks
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
+import java.lang.Exception
 import java.util.*
 
 open class Ingredient : Material{
@@ -18,47 +21,55 @@ open class Ingredient : Material{
     }
 
 
-    override  fun readdata() {
-        db.collection("ingredient")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val ingredient = Ingredient("id_dummy",
-                        Date(),
-                        "name_dummy",
-                        0,
-                        "g_dummy",
-                        "shopname_dummy",
-                        "comment_dummy",
-                        mutableListOf())
+    override suspend fun readdata() {
 
-                    ingredient.id = document.data["id"].toString()
-                    val firestoreTimestamp = document.data["date"] as com.google.firebase.Timestamp
-                    ingredient.date = firestoreTimestamp.toDate()
-                    ingredient.name = document.data["name"].toString()
-                    ingredient.amount = document.data["amount"].toString().toInt()
-                    ingredient.dimension = document.data["dimension"].toString()
-                    ingredient.shopname = document.data["shopname"].toString()
-                    ingredient.comment = document.data["comment"].toString()
-                    if (document.data["idrel"]!=null){
-                        ingredient.idrel = document.data["idrel"] as MutableList<String>
-                        if(ingredient.idrel.size != 0){
-                            Log.d("uztest", "idrel="+ingredient.idrel)
-                            var idrel1 = ingredient.idrel[0]
-                            Log.d("uztest", "idrel = ${idrel1}")}
+        IngredientData.clear()
+
+        try {
+            val result = Tasks.await(db.collection("ingredient").get())
+            for (document in result) {
+                val ingredient = Ingredient(
+                    "id_dummy",
+                    Date(),
+                    "name_dummy",
+                    0,
+                    "g_dummy",
+                    "shopname_dummy",
+                    "comment_dummy",
+                    mutableListOf()
+                )
+
+                ingredient.id = document.data["id"].toString()
+                val firestoreTimestamp = document.data["date"] as com.google.firebase.Timestamp
+                ingredient.date = firestoreTimestamp.toDate()
+                ingredient.name = document.data["name"].toString()
+                ingredient.amount = document.data["amount"].toString().toInt()
+                ingredient.dimension = document.data["dimension"].toString()
+                ingredient.shopname = document.data["shopname"].toString()
+                ingredient.comment = document.data["comment"].toString()
+                if (document.data["idrel"] != null) {
+                    ingredient.idrel = document.data["idrel"] as MutableList<String>
+                    if (ingredient.idrel.size != 0) {
+//                            Log.d("uztest", "idrel=" + ingredient.idrel)
+                        var idrel1 = ingredient.idrel[0]
+//                            Log.d("uztest", "idrel = ${idrel1}")
                     }
-
-                    mIngredientAdapter.mIngredientList.add(ingredient)
                 }
+                IngredientData.add(ingredient)
+//                    Log.d("uztest", "DataSize on readdata=${IngredientData.size}")
+//                    mIngredientAdapter.mIngredientList.add(ingredient)
             }
-            .addOnFailureListener { Log.d("uztest","read failed")
 
-            }
+        Log.d("uztest", "readdata done")
+    } catch (e:Exception){
+        Log.d("uztest", "readdata failed:${e.message}")
+    }
+
+        return
     }
 
 
-
-    override fun savedata() {
+    override suspend fun savedata() {
         TODO("Not yet implemented")
     }
 

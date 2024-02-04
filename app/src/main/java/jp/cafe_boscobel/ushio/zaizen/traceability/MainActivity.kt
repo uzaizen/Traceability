@@ -14,9 +14,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import android.view.View
+import android.widget.ListView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.config.GservicesValue.value
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.SnapshotMetadata
 import com.google.firebase.ktx.Firebase
 import com.squareup.okhttp.internal.DiskLruCache
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_ingredience.*
+import kotlinx.coroutines.*
 //import kotlinx.android.synthetic.main.activity_main.fab
 //import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlin.coroutines.*
@@ -34,72 +38,105 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-private var snapshotListener : ListenerRegistration? = null
+
+// private var snapshotListener : ListenerRegistration? = null
 lateinit var db:FirebaseFirestore
-lateinit var mIngredientAdapter:IngredientAdapter
-//lateinit var mTaskAdapter:TaskAdapter
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
-//    private lateinit var mTaskAdapter: TaskAdapter
-//    private lateinit var mIngredientAdapter: IngredientAdapter
-//    private lateinit var db: FirebaseFirestore
-
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+    private lateinit var drawer_layout:DrawerLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
- try{
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
- }
- catch (e: Exception) {
-     Log.d("uztest", "Error in onCreate", e)
-     e.printStackTrace()
- }
-
-        showFragmentMidproduct()
-
-     if (supportActionBar == null) {
-         setSupportActionBar(findViewById(R.id.toolbar))  // ここで適切なToolbarのIDを指定する必要があります
-     }
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
 
 
- //           fab.setOnClickListener { View -> Log.d("uztest", "114") }
 
-     actionBarDrawerToggle = ActionBarDrawerToggle(
-         this,
-         drawer_layout,
-         toolbar,
-         R.string.navigation_drawer_open,
-         R.string.navigation_drawer_close
-     )
-     drawer_layout.addDrawerListener(actionBarDrawerToggle)
-     actionBarDrawerToggle.syncState()
+        if (supportActionBar == null) {
+            setSupportActionBar(findViewById(R.id.toolbar))  // ここで適切なToolbarのIDを指定する必要があります
+        }
 
-     nav_view.setNavigationItemSelectedListener {
-         when (it.itemId) {
-             R.id.nav_item1 -> showToast(getString(R.string.ingredient))
-             R.id.nav_item2 -> showToast(getString(R.string.midproduct))
-             R.id.nav_item3 -> showToast(getString(R.string.finalproduct))
-             // Add more cases as needed
-         }
-         drawer_layout.closeDrawers()
-         true
-     }
-/*
+
+        //           fab.setOnClickListener { View -> Log.d("uztest", "114") }
+
+        drawer_layout = findViewById(R.id.drawer_layout)
+
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer_layout.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+
+
+
+        nav_view.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_item1 -> {
+                    showToast(getString(R.string.ingredient))
+
+                    CoroutineScope(Dispatchers.Main).launch {
+
+                        withContext(Dispatchers.IO) {
+                            // バックグラウンドでの非同期処理
+                            val ingredient =
+                                Ingredient(
+                                    "000",
+                                    Date(),
+                                    "name0",
+                                    0,
+                                    "g",
+                                    "dummy",
+                                    "",
+                                    mutableListOf("")
+                                )
+                            ingredient.readdata()
+                        }
+
+                        withContext(Dispatchers.Main){
+                            showFragmentIngredience()
+                        }
+
+                        }
+                    }
+
+                R.id.nav_item2 -> showToast(getString(R.string.midproduct))
+                R.id.nav_item3 -> showToast(getString(R.string.finalproduct))
+                // Add more cases as needed
+            }
+            drawer_layout.closeDrawers()
+            true
+        }
+
+        /*
         fab.setOnClickListener { view ->
             reloadListView1()
         }
 
- */
+         */
 
 
-            // Firestoreをインスタンス化
-            db = FirebaseFirestore.getInstance()
+
+
+
+
+        // Firestoreをインスタンス化
+        db = FirebaseFirestore.getInstance()
+
+//        showFragmentIngredience()
 
 //        mTaskAdapter = TaskAdapter(this)
-            mIngredientAdapter = IngredientAdapter(this)
+//        mIngredientAdapter = IngredientAdapter(this)
 
 
 /*        listView1.setOnItemClickListener { parent, _, position, _ ->
@@ -117,6 +154,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
  */
+
+
 
 
 /*
@@ -138,12 +177,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
  */
 
+/*
+        val ingredient =
+            Ingredient("000", Date(), "name0", 0, "g", "dummy", "", mutableListOf(""))
+        ingredient.readdata()
+        Thread.sleep(5000)
+        //    reloadListView1()
 
-            val ingredient =
-                Ingredient("000", Date(), "name0", 0, "g", "dummy", "", mutableListOf(""))
-            ingredient.readdata()
-            Thread.sleep(5000)
-            //    reloadListView1()
+ */
+
+
 
 
 /*
@@ -171,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
  */
 
-            /*
+        /*
 
         /* 指定したデータの読み出し */
         var key:String = "905"
@@ -231,7 +274,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
  */
 
 
-            /*
+        /*
     private fun loaddata0(){
         db.collection("task")
                 .get()
@@ -265,10 +308,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
  */
+    }
 
 
-/*
-    private fun reloadListView1() {
+/*    private fun reloadListView1() {
         listView1.adapter = mIngredientAdapter
         mIngredientAdapter.notifyDataSetChanged()
 //        mIngredientAdapter.mIngredientList.clear()
@@ -276,7 +319,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
  */
 
-    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_option, menu)
@@ -297,10 +340,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.nav_item1) {
             toolbar.title = getString(R.string.menu_ingredient_label)
-            showFragmentIngredience()
         } else if (id == R.id.nav_item2) {
             toolbar.title = getString(R.string.menu_midproduct_label)
-            showFragmentMidproduct()
         } else if (id == R.id.nav_item3) {
             toolbar.title = getString(R.string.menu_finalproduct_label)
         }
@@ -311,9 +352,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        if (message == getString(R.string.ingredient)) showFragmentIngredience()
+        if (message == getString(R.string.ingredient)) {
+
+        }
+
         if (message == getString(R.string.midproduct)) showFragmentMidproduct()
+        if (message == "完成品") showFragmentFinalproduct()
     }
+
 
 
     private fun showFragmentIngredience() {
@@ -332,6 +378,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addToBackStack(null)
             .commit()
     }
+
+    private fun showFragmentFinalproduct() {
+        val fragmentC = Fragment_Finalproduct()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragmentC)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
 
 }
 
