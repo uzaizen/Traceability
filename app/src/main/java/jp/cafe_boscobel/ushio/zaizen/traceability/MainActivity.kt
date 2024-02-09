@@ -57,14 +57,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
 
-
-
         if (supportActionBar == null) {
             setSupportActionBar(findViewById(R.id.toolbar))  // ここで適切なToolbarのIDを指定する必要があります
         }
-
-
-        //           fab.setOnClickListener { View -> Log.d("uztest", "114") }
 
         drawer_layout = findViewById(R.id.drawer_layout)
 
@@ -97,6 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                     0,
                                     "g",
                                     "dummy",
+                                    Date(),
                                     "",
                                     mutableListOf("")
                                 )
@@ -126,36 +122,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          */
 
 
-
-
-
-
         // Firestoreをインスタンス化
         db = FirebaseFirestore.getInstance()
-
-//        showFragmentIngredience()
-
-//        mTaskAdapter = TaskAdapter(this)
-//        mIngredientAdapter = IngredientAdapter(this)
-
-
-/*        listView1.setOnItemClickListener { parent, _, position, _ ->
-            Log.d("uztest", "position=${position.toString()}")
-            val task = parent.adapter.getItem(position) as Task
-            Log.d("uztest", "tapped " + task.name.toString())
-        }
-
- */
-/*
-        listView1.setOnItemClickListener { parent, _, position, _ ->
-            Log.d("uztest", "position=${position.toString()}")
-            val ingredient = parent.adapter.getItem(position) as Ingredient
-            Log.d("uztest", "tapped " + ingredient.name.toString())
-        }
-
- */
-
-
 
 
 /*
@@ -174,23 +142,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Log.d("uztest","write failed")
                 }
         Log.d("uztest","write process done")
-
- */
-
-/*
-        val ingredient =
-            Ingredient("000", Date(), "name0", 0, "g", "dummy", "", mutableListOf(""))
-        ingredient.readdata()
-        Thread.sleep(5000)
-        //    reloadListView1()
-
  */
 
 
-
-
 /*
-
         var task = Task()
         task.id  = "111"
         task.name = "name"
@@ -327,11 +282,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_option_item1 -> {
+                // オプション1が選択されたときの処理
+                showFragmentIngredienceInput()
+                Log.d("uztest","option1 is selected")
+
+                return true
+            }
+            R.id.nav_option_item2 -> {
+                Log.d("uztest","option2 is selected")
+                // オプション2が選択されたときの処理
+                return true
+            }
+            // 他のオプションの処理もここに追加できます
+            else -> return super.onOptionsItemSelected(item)
+        }
+/*
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+
+            Log.d("uztest","selected option is ${item}")
+
             return true
         }
-        // Handle other action bar items...
 
+ */
         return super.onOptionsItemSelected(item)
     }
 
@@ -387,7 +362,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-
+    private fun showFragmentIngredienceInput() {
+        val fragmentAA = Fragment_InputIngredience()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragmentAA)
+            .addToBackStack(null)
+            .commit()
+    }
 
 }
 

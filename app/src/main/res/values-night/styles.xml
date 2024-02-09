@@ -4,4 +4,5 @@
         <!-- For example: parent="Theme.AppCompat.Light.NoActionBar" -->
         <!-- ... other style attributes ... -->
     </style>
+
 </resources>

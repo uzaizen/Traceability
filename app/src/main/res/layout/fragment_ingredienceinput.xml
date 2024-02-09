@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp">
+
+    <EditText
+        android:id="@+id/ingredientDateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Date"
+        android:textSize="25sp"
+        android:clickable="true"/>
+
+    <EditText
+        android:id="@+id/ingredientNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="Name"/>
+
+    <EditText
+        android:id="@+id/ingredientAmountEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="300dp"
+        android:inputType="number"
+        android:textSize="25sp"
+        android:hint="Amount"/>
+
+    <EditText
+        android:id="@+id/ingredientDimensionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_marginStart="400dp"
+        android:textSize="25sp"
+        android:hint="Dim."/>
+
+    <EditText
+        android:id="@+id/ingredientShopNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_marginStart="480dp"
+        android:textSize="25sp"
+        android:hint="Shop"/>
+
+    <EditText
+        android:id="@+id/ingredientCommentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_marginStart="580dp"
+        android:textSize="25sp"
+        android:hint="Comment"/>
+
+
+
+    <EditText
+        android:id="@+id/ingredientExpirationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Expiration"
+        android:layout_marginStart="800dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="16dp"
+        android:textSize="25sp"
+        android:clickable="true"/>
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ingredient"
+        android:layout_marginStart="1000dp"
+        android:textSize="25sp"/>
+</RelativeLayout>

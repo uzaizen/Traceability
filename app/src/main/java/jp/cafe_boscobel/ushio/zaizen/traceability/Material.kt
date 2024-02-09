@@ -10,6 +10,7 @@ abstract class Material
     var amount: Int
     var dimension: String
     var shopname: String
+    var expiration : Date
     var comment: String
     var idrel:MutableList<String>
 
@@ -21,6 +22,7 @@ abstract class Material
         amount: Int,
         dimension: String,
         shopname : String,
+        expiration : Date,
         comment: String,
         idrel:MutableList<String>
     )
@@ -30,10 +32,12 @@ abstract class Material
         this.amount = amount
         this.dimension = dimension
         this.shopname = shopname
+        this.expiration = expiration
         this.comment = comment
         this.idrel = idrel
     }
 
     abstract suspend fun readdata()
+    abstract suspend fun adddata()
     abstract suspend fun savedata()
 }

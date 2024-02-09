@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.fragment_ingredience.*
 import kotlinx.coroutines.*
 import java.util.*
 
-var IngredientData:MutableList<Material> = mutableListOf()
 
 class Fragment_Ingredience : Fragment() {
 
@@ -38,9 +37,6 @@ class Fragment_Ingredience : Fragment() {
             Log.d("uztest", "tapped " + ingredient.name.toString())
         }
 
-//        fab.setOnClickListener { View -> Log.d("uztest", "clicked") }
-
-        Log.d("uztest", "Fragment onCreateView done")
         return view
     }
 
@@ -54,7 +50,6 @@ class Fragment_Ingredience : Fragment() {
 
         mIngredientAdapter.notifyDataSetChanged()
 
-        Log.d("uztest", "Fragment on Start Done")
         return
 
     }
