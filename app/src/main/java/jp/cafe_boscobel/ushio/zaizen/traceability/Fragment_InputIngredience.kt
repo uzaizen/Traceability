@@ -64,11 +64,11 @@ class Fragment_InputIngredience  : Fragment() {
 
     private fun addIngredient() {
         val id = "123" // あなたのIDを設定
-        val name = ingredientNameEditText.text.toString()
-        val amount = ingredientAmountEditText.text.toString().toInt()
-        val dimension = ingredientDimensionEditText.text.toString()
-        val shopName = ingredientShopNameEditText.text.toString()
-        val comment = ingredientCommentEditText.text.toString()
+        val name = ingredienceNameEditText.text.toString()
+        val amount = ingredienceAmountEditText.text.toString().toInt()
+        val dimension = ingredienceDimensionEditText.text.toString()
+        val shopName = ingredienceShopNameEditText.text.toString()
+        val comment = ingredienceCommentEditText.text.toString()
         val idRelList = mutableListOf<String>()
 
         CoroutineScope(Dispatchers.Main).launch {

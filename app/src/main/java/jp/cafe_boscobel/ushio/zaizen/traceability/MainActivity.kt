@@ -45,7 +45,8 @@ import kotlinx.coroutines.launch
 
 // private var snapshotListener : ListenerRegistration? = null
 lateinit var db:FirebaseFirestore
-
+var nav_menu_num:Int = 0   //navigation item number   1:ingredience 2:midproduct 3:finalproduct
+var nav_option_num: Int = 0 //option item number 1:add 2:update 3:delete
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
@@ -78,7 +79,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_item1 -> {
-                    showToast(getString(R.string.ingredient))
+                    nav_menu_num = 1
+                    val toolbar: Toolbar = findViewById(R.id.toolbar)
+                    toolbar.setTitle(R.string.ingredient)
 
                     CoroutineScope(Dispatchers.Main).launch {
 
@@ -106,9 +109,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
 
-                R.id.nav_item2 -> showToast(getString(R.string.midproduct))
-                R.id.nav_item3 -> showToast(getString(R.string.finalproduct))
-                // Add more cases as needed
+                R.id.nav_item2 -> {
+                    showToast(getString(R.string.midproduct))
+                    val toolbar: Toolbar = findViewById(R.id.toolbar)
+                    toolbar.setTitle(R.string.midproduct)
+                }
+                R.id.nav_item3 -> {
+                    showToast(getString(R.string.finalproduct))
+                    val toolbar: Toolbar = findViewById(R.id.toolbar)
+                    toolbar.setTitle(R.string.finalproduct)
+                }
             }
             drawer_layout.closeDrawers()
             true
@@ -284,15 +294,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_option_item1 -> {
+                when (nav_menu_num){
+                    0 ->{
+                    val error_message = getString(R.string.no_selected_data_file)
+                        Toast.makeText(this,error_message,Toast.LENGTH_SHORT).show()
+                    }
+                    1 -> {  nav_option_num = 1
+                            showFragmentIngredienceInput()
+                            return true}
+                    2 -> {  nav_option_num = 2
+                            return true}
+                    3 -> { nav_option_num = 3
+                            return true}
+                }
                 // オプション1が選択されたときの処理
-                showFragmentIngredienceInput()
-                Log.d("uztest","option1 is selected")
 
-                return true
             }
             R.id.nav_option_item2 -> {
-                Log.d("uztest","option2 is selected")
                 // オプション2が選択されたときの処理
+                nav_option_num = 2
                 return true
             }
             // 他のオプションの処理もここに追加できます

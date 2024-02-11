@@ -7,9 +7,11 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/nav_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="トレーサビリティ"
+        android:paddingTop="10dp"
+        android:text="対象ファイル選択"
         android:textSize="18sp"
         android:textColor="?android:textColorPrimary"/>
 

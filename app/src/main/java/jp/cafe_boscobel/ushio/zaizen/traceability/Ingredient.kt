@@ -79,8 +79,7 @@ open class Ingredient : Material{
     override suspend fun adddata() {
         var NextID: String = "0001"
         val result = Tasks.await(
-            db.collection("ingredient").orderBy("id", Query.Direction.DESCENDING).limit(1).get()
-        )
+            db.collection("ingredient").orderBy("id", Query.Direction.DESCENDING).limit(1).get())
         for (document in result) {
             val ingredient = Ingredient(
                 "id_dummy",
@@ -96,29 +95,6 @@ open class Ingredient : Material{
             ingredient.id = document.data["id"].toString()
             NextID = (ingredient.id.toLong()+1).toString()
             AddIngredience.id = NextID
-
-/*        db.collection("ingredient").orderBy("id", Query.Direction.DESCENDING).limit(1)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot != null && !querySnapshot.isEmpty) {
-                    val maxDocument = querySnapshot.documents[0]
-                    // 最大値を使用
-                    val maxFieldValue = maxDocument.getString("id")
-                    Log.d("uztest","maxFieldValue=${maxFieldValue}")
-                    if (maxFieldValue != null) {
-                        NextID = (maxFieldValue.toLong() + 1).toString()
-                    } else {NextID = "1"
-                    }
-                } else {
-                      // ドキュメントが見つからなかった場合の処理
-                }
-            }
-            .addOnFailureListener { exception ->
-                // エラーが発生した場合の処理
-            }
-
-
- */
 
         db.collection("ingredient")
             .document(AddIngredience.id)

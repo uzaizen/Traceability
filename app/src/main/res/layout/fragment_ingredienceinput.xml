@@ -4,77 +4,145 @@
     android:layout_height="match_parent"
     android:layout_marginTop="50dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingrediencedateinput"
+        android:textSize="25sp"
+        android:text="@string/ingredienceinputdate"/>
+
     <EditText
         android:id="@+id/ingredientDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Date"
+        android:layout_alignBaseline="@id/ingrediencedateinput"
+        android:layout_toRightOf="@id/ingrediencedateinput"
+        android:layout_marginStart="80sp"
         android:textSize="25sp"
         android:clickable="true"/>
 
-    <EditText
-        android:id="@+id/ingredientNameEditText"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:inputType="text"
+        android:id="@+id/ingrediencenameinput"
         android:textSize="25sp"
-        android:hint="Name"/>
+        android:text="@string/ingrediencename"
+        android:layout_below="@id/ingrediencedateinput"/>
+
 
     <EditText
-        android:id="@+id/ingredientAmountEditText"
+        android:id="@+id/ingredienceNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:hint="Name"
+        android:layout_alignBaseline="@+id/ingrediencenameinput"
+        android:layout_alignLeft="@+id/ingredientDateEditText"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingredienceamountinput"
+        android:textSize="25sp"
+        android:text="@string/ingredienceamount"
+        android:layout_below="@id/ingrediencenameinput"/>
+
+    <EditText
+        android:id="@+id/ingredienceAmountEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
         android:inputType="number"
         android:textSize="25sp"
-        android:hint="Amount"/>
+        android:hint="Amount"
+        android:layout_alignLeft="@id/ingredienceNameEditText"
+        android:layout_alignBaseline="@id/ingredienceamountinput"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingrediencediminput"
+        android:textSize="25sp"
+        android:text="@string/ingrediencedim"
+        android:layout_below="@id/ingredienceamountinput"/>
 
     <EditText
-        android:id="@+id/ingredientDimensionEditText"
+        android:id="@+id/ingredienceDimensionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_marginStart="400dp"
         android:textSize="25sp"
-        android:hint="Dim."/>
+        android:hint="Dim."
+        android:layout_alignLeft="@id/ingredienceAmountEditText"
+        android:layout_alignBaseline="@id/ingrediencediminput"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingredienceshopname"
+        android:textSize="25sp"
+        android:text="@string/ingredienceshop"
+        android:layout_below="@id/ingrediencediminput"/>
 
     <EditText
-        android:id="@+id/ingredientShopNameEditText"
+        android:id="@+id/ingredienceShopNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_marginStart="480dp"
         android:textSize="25sp"
-        android:hint="Shop"/>
+        android:hint="Shop"
+        android:layout_alignLeft="@id/ingredienceDimensionEditText"
+        android:layout_alignBaseline="@id/ingredienceshopname"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingrediencecomment"
+        android:textSize="25sp"
+        android:text="@string/ingrediencecomment"
+        android:layout_below="@id/ingredienceshopname"/>
 
     <EditText
-        android:id="@+id/ingredientCommentEditText"
+        android:id="@+id/ingredienceCommentEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_marginStart="580dp"
         android:textSize="25sp"
-        android:hint="Comment"/>
+        android:hint="Comment"
+        android:layout_alignLeft="@id/ingredienceShopNameEditText"
+        android:layout_alignBaseline="@id/ingrediencecomment"/>
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ingredienceexpire"
+        android:textSize="25sp"
+        android:text="@string/ingredienceexpire"
+        android:layout_below="@id/ingrediencecomment"/>
 
     <EditText
         android:id="@+id/ingredientExpirationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Expiration"
-        android:layout_marginStart="800dp"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="16dp"
         android:textSize="25sp"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:layout_alignLeft="@id/ingredienceCommentEditText"
+        android:layout_alignBaseline="@id/ingredienceexpire"/>
 
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Ingredient"
-        android:layout_marginStart="1000dp"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginStart="300sp"
+        android:layout_below="@id/ingredienceexpire"
+        />
 </RelativeLayout>
